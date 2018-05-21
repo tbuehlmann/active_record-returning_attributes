@@ -1,6 +1,6 @@
 module ActiveRecord
   module ReturningAttributes
-  	module WithReturning
+    module WithReturning
       def with_returning_attributes(attributes)
         begin
           @_returning_attributes = attributes

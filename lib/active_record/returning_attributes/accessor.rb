@@ -2,7 +2,7 @@ require 'active_support/concern'
 
 module ActiveRecord
   module ReturningAttributes
-  	module Accessor
+    module Accessor
       extend ActiveSupport::Concern
 
       included do

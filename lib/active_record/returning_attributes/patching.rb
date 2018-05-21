@@ -3,7 +3,7 @@ require_relative '../returning_attributes/with_returning'
 
 module ActiveRecord
   module ReturningAttributes
-  	module Patching
+    module Patching
       def self.patch_base
         Base.include(Accessor)
       end
