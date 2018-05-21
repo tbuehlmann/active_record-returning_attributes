@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     active_record-returning_attributes (0.1.0)
-      activerecord (= 5.2.0)
+      activerecord
       pg
 
 GEM
