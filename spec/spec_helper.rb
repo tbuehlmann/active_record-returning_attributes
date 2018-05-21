@@ -1,5 +1,9 @@
 require 'bundler/setup'
+require 'active_record'
 require 'active_record/returning_attributes'
+require 'pry'
+
+require_relative 'support/schema_and_models'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -11,4 +15,6 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
+  config.filter_run_when_matching :focus
 end

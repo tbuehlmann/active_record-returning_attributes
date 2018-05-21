@@ -6,7 +6,7 @@ module ActiveRecord
       extend ActiveSupport::Concern
 
       included do
-        class_attribute :returning, default: []
+        class_attribute :returning_attributes, default: []
       end
     end
   end

@@ -1,13 +1,13 @@
 module ActiveRecord
   module ReturningAttributes
   	module WithReturning
-      def with_returning(returning)
+      def with_returning_attributes(attributes)
         begin
-          @_returning = returning
-          [yield, @_insert_result]
+          @_returning_attributes = attributes
+          [yield, @_returned_attributes || {}]
         ensure
-          @_returning = nil
-          @_insert_result = nil
+          @_returning_attributes = nil
+          @_returned_attributes = nil
         end
       end
     end

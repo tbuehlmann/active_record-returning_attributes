@@ -2,8 +2,8 @@ PATH
   remote: .
   specs:
     active_record-returning_attributes (0.1.0)
-      activerecord
-      activesupport
+      activerecord (= 5.2.0)
+      pg
 
 GEM
   remote: https://rubygems.org/
@@ -27,9 +27,13 @@ GEM
       concurrent-ruby (~> 1.0)
     method_source (0.9.0)
     minitest (5.11.3)
+    pg (1.0.0)
     pry (0.11.3)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
+    pry-doc (0.13.4)
+      pry (~> 0.11)
+      yard (~> 0.9.11)
     rake (10.5.0)
     rspec (3.7.0)
       rspec-core (~> 3.7.0)
@@ -47,6 +51,7 @@ GEM
     thread_safe (0.3.6)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
+    yard (0.9.12)
 
 PLATFORMS
   ruby
@@ -55,6 +60,7 @@ DEPENDENCIES
   active_record-returning_attributes!
   bundler (~> 1.16)
   pry
+  pry-doc
   rake (~> 10.0)
   rspec (~> 3.0)
 
