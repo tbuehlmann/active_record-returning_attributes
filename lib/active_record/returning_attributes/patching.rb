@@ -65,14 +65,16 @@ module ActiveRecord
             sql, binds = sql_for_insert(sql, pk, nil, sequence_name, binds)
 
             exec_query(sql, name, binds).tap do |result|
-              @_returned_attributes = result.first.to_hash
+              if @_returning_attributes.present?
+                @_returned_attributes = result.first.to_hash
+              end
             end
           end
 
           def update(arel, name = nil, binds = [])
             sql, binds = to_sql_and_binds(arel, binds)
 
-            if @_returning_attributes && !@_returning_attributes.empty?
+            if @_returning_attributes.present?
               sql = "#{sql} RETURNING #{@_returning_attributes.map { |column| quote_column_name(column) }.join(', ')}"
             end
 
@@ -95,7 +97,11 @@ module ActiveRecord
             end
 
             if pk = suppress_composite_primary_key(pk)
-              sql = "#{sql} RETURNING #{[pk, @_returning_attributes].flatten.map { |column| quote_column_name(column) }.join(', ')}"
+              sql = if @_returning_attributes.present?
+                "#{sql} RETURNING #{[pk, @_returning_attributes].flatten.map { |column| quote_column_name(column) }.join(', ')}"
+              else
+                "#{sql} RETURNING #{quote_column_name(pk)}"
+              end
             end
 
             super
@@ -120,7 +126,7 @@ module ActiveRecord
               result = exec_cache(sql, name, binds)
             end
 
-            if @_returning_attributes && !@_returning_attributes.empty?
+            if @_returning_attributes.present?
               @_returned_attributes = result.to_a.first
             end
 
