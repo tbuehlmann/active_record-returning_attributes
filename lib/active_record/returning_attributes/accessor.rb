@@ -5,8 +5,16 @@ module ActiveRecord
     module Accessor
       extend ActiveSupport::Concern
 
-      included do
-        class_attribute :returning_attributes, default: []
+      def returning_attributes
+        self.class.returning_attributes
+      end
+
+      module ClassMethods
+        attr_reader :returning_attributes
+
+        def returning_attributes=(attributes)
+          @returning_attributes = attributes.map(&:to_s)
+        end
       end
     end
   end

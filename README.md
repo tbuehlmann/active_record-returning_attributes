@@ -11,7 +11,7 @@ Internally this library changes the `RETURNING` clause for inserts and adds it f
 Caveats:
 
 - PostgreSQL only
-- Only tested in Rails 5.2.0
+- Only tested in Rails 6.0.0.rc1
 - Overrides ActiveRecord core code
 
 ## Installation

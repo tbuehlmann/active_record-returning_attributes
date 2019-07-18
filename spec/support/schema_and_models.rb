@@ -1,3 +1,10 @@
+ActiveRecord::Base.establish_connection(adapter: 'postgresql')
+
+begin
+  ActiveRecord::Base.connection.create_database('returning_attributes')
+rescue ActiveRecord::StatementInvalid
+end
+
 ActiveRecord::Base.establish_connection(adapter: 'postgresql', database: 'returning_attributes')
 ActiveRecord::Base.logger = Logger.new(STDOUT)
 
