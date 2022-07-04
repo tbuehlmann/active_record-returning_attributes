@@ -22,11 +22,12 @@ module ActiveRecord
       end
     end
 
-    def self.active_record_6_0_0_rc1_tested_only
-      unless ActiveRecord.version == Gem::Version.new('5.2.0')
+    def self.active_record_7_0_3_tested_only
+      unless ActiveRecord.version == Gem::Version.new('7.0.3')
         warn 'ActiveRecord::ReturningAttributes was only tested on ActiveRecord 5.2.0 and might not work with your version.'
       end
     end
+
 
     ActiveSupport.on_load(:active_record) do
       ReturningAttributes.postgresql_only do
@@ -36,7 +37,7 @@ module ActiveRecord
         ReturningAttributes::Patching.patch_postgresql_database_statements
         ReturningAttributes::Patching.patch_postgresql_adapter
 
-        ReturningAttributes.active_record_6_0_0_rc1_tested_only
+        ReturningAttributes.active_record_7_0_3_tested_only
       end
     end
   end

@@ -22,6 +22,7 @@ module ActiveRecord
           #   self.id ||= new_id if @primary_key
 
           #   @new_record = false
+          #   @previously_new_record = true
 
           #   yield(self) if block_given?
 
@@ -36,11 +37,12 @@ module ActiveRecord
 
             self.id ||= new_id if @primary_key
 
-            returning_attributes.each do |attribute|
+            returning_attributes&.each do |attribute|
               write_attribute(attribute, returned_attributes[attribute]) if returned_attributes.key?(attribute)
             end
 
             @new_record = false
+            @previously_new_record = true
 
             yield(self) if block_given?
 
@@ -57,6 +59,8 @@ module ActiveRecord
           #     affected_rows = _update_row(attribute_names)
           #     @_trigger_update_callback = affected_rows == 1
           #   end
+
+          #   @previously_new_record = false
 
           #   yield(self) if block_given?
 
@@ -79,6 +83,8 @@ module ActiveRecord
 
               @_trigger_update_callback = affected_rows == 1
             end
+
+            @previously_new_record = false
 
             yield(self) if block_given?
 
@@ -166,41 +172,38 @@ module ActiveRecord
 
           private
 
-          # def execute_and_clear(sql, name, binds, prepare: false)
-          #   if preventing_writes? && write_query?(sql)
-          #     raise ActiveRecord::ReadOnlyError, "Write query attempted while in readonly mode: #{sql}"
-          #   end
+          # def execute_and_clear(sql, name, binds, prepare: false, async: false)
+          #   sql = transform_query(sql)
+          #   check_if_write_query(sql)
 
-          #   if without_prepared_statement?(binds)
-          #     result = exec_no_cache(sql, name, [])
-          #   elsif !prepare
-          #     result = exec_no_cache(sql, name, binds)
+          #   if !prepare || without_prepared_statement?(binds)
+          #     result = exec_no_cache(sql, name, binds, async: async)
           #   else
-          #     result = exec_cache(sql, name, binds)
+          #     result = exec_cache(sql, name, binds, async: async)
           #   end
-          #   ret = yield result
-          #   result.clear
+          #   begin
+          #     ret = yield result
+          #   ensure
+          #     result.clear
+          #   end
           #   ret
           # end
-          def execute_and_clear(sql, name, binds, prepare: false)
-            if preventing_writes? && write_query?(sql)
-              raise ActiveRecord::ReadOnlyError, "Write query attempted while in readonly mode: #{sql}"
-            end
+          def execute_and_clear(sql, name, binds, prepare: false, async: false)
+            sql = transform_query(sql)
+            check_if_write_query(sql)
 
-            if without_prepared_statement?(binds)
-              result = exec_no_cache(sql, name, [])
-            elsif !prepare
-              result = exec_no_cache(sql, name, binds)
+            if !prepare || without_prepared_statement?(binds)
+              result = exec_no_cache(sql, name, binds, async: async)
             else
-              result = exec_cache(sql, name, binds)
+              result = exec_cache(sql, name, binds, async: async)
             end
+            begin
+              ret = yield result
 
-            if @_returning_attributes.present?
-              @_returned_attributes = result.to_a.first
+              @_returned_attributes = result.to_a.first if @_returning_attributes.present?
+            ensure
+              result.clear
             end
-
-            ret = yield result
-            result.clear
             ret
           end
         end
