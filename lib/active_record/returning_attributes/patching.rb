@@ -77,7 +77,7 @@ module ActiveRecord
                 _update_row(attribute_names)
               end
 
-              returning_attributes.each do |attribute|
+              returning_attributes&.each do |attribute|
                 write_attribute(attribute, returned_attributes[attribute]) if returned_attributes.key?(attribute)
               end
 
