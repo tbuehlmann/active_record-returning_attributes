@@ -6,7 +6,7 @@ module ActiveRecord
       extend ActiveSupport::Concern
 
       def returning_attributes
-        self.class.returning_attributes
+        self.class.base_class.returning_attributes
       end
 
       module ClassMethods
