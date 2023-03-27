@@ -24,7 +24,7 @@ module ActiveRecord
 
     def self.active_record_7_0_tested_only
       unless ActiveRecord.version >= '7.0.0' && ActiveRecord.version < '7.1'
-        warn 'ActiveRecord::ReturningAttributes was only tested on ActiveRecord 7.0.x and might not work with your version.'
+        warn 'ActiveRecord::ReturningAttributes was only tested on ActiveRecord 7.0 and might not work with your version.'
       end
     end
 
